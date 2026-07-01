@@ -3,15 +3,17 @@ import sqlite3
 from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_from_directory
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 app = Flask(__name__)
 app.secret_key = 'cok_gizli_anahtar_arsiv'
-app.config['UPLOAD_FOLDER'] = 'uploads'
+app.config['UPLOAD_FOLDER'] = os.path.join(BASE_DIR, 'uploads')
 
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
 def get_db_connection():
-    conn = sqlite3.connect('arsiv.db')
+    conn = sqlite3.connect(os.path.join(BASE_DIR, 'arsiv.db'))
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -222,4 +224,5 @@ def yetki_kaydet():
     return redirect(url_for('admin_panel'))
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    # host='0.0.0.0' ayarı, yerel ağdaki herkesin bağlanmasını sağlar
+    app.run(debug=True, host='0.0.0.0', port=5000)
