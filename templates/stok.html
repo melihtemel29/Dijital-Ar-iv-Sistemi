@@ -70,8 +70,8 @@
                 <i class="bi bi-person-fill"></i>
             </div>
             <div class="profile-info">
-                <h6>{{ session['ad_soyad'] }}</h6>
-                <small>{{ 'Sistem Yöneticisi' if session['rol'] == 'admin' else 'Personel' }}</small>
+                <h6>{{ 'Sistem Yöneticisi' if session.get('rol') == 'admin' else 'Kullanıcı' }}</h6>
+                <small>{{ session.get('ad_soyad', 'Personel') }}</small>
             </div>
         </div>
 
