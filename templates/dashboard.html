@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KTÜ | Ana Sayfa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+    <style>
+        body { background-color: #f4f6f9; font-family: 'Segoe UI', sans-serif; }
+        .sidebar { background-color: #2c303b; min-height: 100vh; color: #fff; width: 260px; position: fixed; z-index: 100; overflow-y: auto; }
+        .ktu-logo-emblem::before, .ktu-logo-emblem::after { content: ""; position: absolute; background-color: #fff; left: 50%; transform: translateX(-50%); }
+        .logo-text-wrapper { display: flex; flex-direction: column; justify-content: center; }
+        .logo-main-title { font-size: 28px; font-weight: 800; color: #fff; line-height: 0.8; font-family: 'Arial Black', sans-serif; letter-spacing: 0.5px; margin: 0; }
+        .logo-sub-info { display: flex; flex-direction: column; margin-top: 2px; }
+        .logo-year { font-size: 13px; font-weight: bold; color: #fff; line-height: 1; font-family: Arial, sans-serif; }
+        .logo-uni-name { font-size: 8px; color: #fff; opacity: 0.85; line-height: 1; letter-spacing: 0.2px; font-weight: 700; text-transform: uppercase; }
+        .system-title { font-size: 13px; color: #fff; opacity: 0.9; font-weight: 500; padding: 10px 0 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); margin: 0; }
+        .logo-container { padding: 25px 20px 20px 20px; display: flex; justify-content: center; align-items: center; }
+        .logo-container img { max-width: 160px; height: auto; }
+        .profile-card { padding: 15px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .profile-img { width: 40px; height: 40px; border-radius: 50%; background-color: #4b4f5d; display: flex; align-items: center; justify-content: center; color: #fff; }
+        .profile-info h6 { margin: 0; font-size: 14px; font-weight: 600; color: #fff; }
+        .profile-info small { color: #a2a5b9; font-size: 11px; }
+        .nav-heading { font-size: 11px; text-transform: uppercase; color: #686c87; padding: 15px 20px 5px 20px; font-weight: bold; margin: 0; }
+        .sidebar .nav-link { color: #c2c7d0; padding: 12px 20px; font-size: 14px; border-left: 3px solid transparent; display: flex; align-items: center; text-decoration: none; cursor: pointer; }
+        .sidebar .nav-link i { font-size: 16px; margin-right: 10px; width: 20px; text-align: center; }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active { background-color: rgba(255,255,255,0.05); color: #fff; border-left-color: #27a2e2; }
+        
+        .main-content { margin-left: 260px; padding: 30px; min-height: 100vh; }
+        
+        .welcome-banner {
+            background: linear-gradient(135deg, #1cb5e0 0%, #000046 100%);
+            border-radius: 12px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        [data-theme="dark"] .welcome-banner {
+            background: linear-gradient(135deg, #1cb5e0 0%, #1a1d24 100%);
+        }
+
+        .welcome-banner h2 { font-weight: 700; margin-bottom: 10px; }
+        .welcome-banner p { opacity: 0.9; margin-bottom: 25px; }
+        
+        .search-box {
+            background: rgba(0,0,0,0.4);
+            border-radius: 8px;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            max-width: 500px;
+        }
+        
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            width: 100%;
+        }
+        
+        .search-box input::placeholder { color: rgba(255,255,255,0.7); }
+        .search-box input:focus { outline: none; }
+        .search-box button { background: rgba(255,255,255,0.15); border: none; color: white; padding: 8px 15px; border-radius: 6px; }
+        .search-box button:hover { background: rgba(255,255,255,0.25); }
+        
+        .section-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: #686c87; text-transform: uppercase; margin-bottom: 15px; }
+        [data-theme="dark"] .section-title { color: #a2a5b9; }
+
+        .stat-card {
+            background: #fff;
+            border: 1px solid #e3e6f0;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .stat-card .stat-value { font-size: 32px; font-weight: 700; color: #102d5c; margin-bottom: 5px; }
+        .stat-card .stat-label { font-size: 13px; color: #6c757d; font-weight: 500; }
+        .stat-card .stat-line { width: 40px; height: 3px; background-color: #27a2e2; margin: 15px auto 0; border-radius: 3px; }
+        
+        .stat-card.warning .stat-line { background-color: #f39c12; }
+        .stat-card.neutral .stat-line { background-color: #6c757d; }
+
+        .quick-action-card {
+            background: #fff;
+            border: 1px solid #e3e6f0;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.2s ease;
+        }
+        .quick-action-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        [data-theme="dark"] .quick-action-card { color: #e9ecef; }
+        
+        .quick-action-card.primary-action {
+            background: #27a2e2;
+            color: white;
+            border: none;
+        }
+        [data-theme="dark"] .quick-action-card.primary-action { background: #27a2e2 !important; color: white !important; }
+        
+        .quick-action-card .icon-box {
+            width: 40px;
+            height: 40px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        .quick-action-card.primary-action .icon-box { background: rgba(255,255,255,0.2); }
+        .quick-action-card h6 { font-weight: 600; margin: 0; font-size: 15px; }
+        
+        .notification-card {
+            background: #fff;
+            border: 1px solid #e3e6f0;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        [data-theme="dark"] .notification-card { background: #1a1d24; border: 1px solid #2c303b; }
+        
+        .notification-card .icon-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(39, 162, 226, 0.1);
+            color: #27a2e2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        .notification-card h6 { font-weight: 600; margin-bottom: 5px; }
+        .notification-card p { color: #6c757d; margin: 0; font-size: 14px; }
+        [data-theme="dark"] .notification-card p { color: #a2a5b9; }
+
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; position: relative; min-height: auto; padding-bottom: 20px; }
+            .main-content { margin-left: 0; padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="logo-container text-center">
+            <img src="{{ url_for('static', filename='ktu_logo_new.png') }}" alt="Kurum Logosu">
+        </div>
+        <p class="system-title">Dijital Arşiv Sistemi</p>
+        
+        <a href="#" class="profile-card text-decoration-none">
+            <div class="profile-img" style="overflow: hidden;">
+                {% if session.get('rol') == 'admin' %}
+                    <img src="{{ url_for('static', filename='profile.jpg') }}" alt="Profil" style="width: 100%; height: 100%; object-fit: cover; object-position: top;">
+                {% else %}
+                    <i class="bi bi-person-fill"></i>
+                {% endif %}
+            </div>
+            <div class="profile-info text-white">
+                <h6 class="m-0" style="font-size: 14px; font-weight: 600;">{{ 'Sistem Yöneticisi' if session.get('rol') == 'admin' else 'Kullanıcı' }}</h6>
+                <small class="text-muted" style="font-size: 12px;">{{ session.get('ad_soyad', 'Personel') }}</small>
+            </div>
+        </a>
+
+        <p class="nav-heading">MENÜ</p>
+        <nav class="nav flex-column">
+            <a class="nav-link active" href="{{ url_for('dashboard') }}"><i class="bi bi-grid-fill"></i> Ana Sayfa</a>
+            <a class="nav-link" href="{{ url_for('ana_sayfa') }}"><i class="bi bi-folder2-open"></i> Klasörler</a>
+            {% if session.get('rol') == 'admin' %}
+            <a class="nav-link" href="{{ url_for('stok_sayfasi') }}"><i class="bi bi-box-seam"></i> Stok & Sarf Malzeme</a>
+            <a class="nav-link" href="{{ url_for('admin_panel') }}"><i class="bi bi-shield-lock"></i> Admin Paneli</a>
+            {% endif %}
+            
+            <div style="margin-top: 30px; margin-bottom: 20px; width: 100%; padding: 0 15px;">
+                <a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm w-100 fw-bold d-flex align-items-center justify-content-center py-2"><i class="bi bi-box-arrow-left me-2"></i> Çıkış Yap</a>
+                <!-- Tema Geçiş Düğmesi -->
+                <div class="theme-switch-wrapper mt-3 text-center">
+                    <label class="theme-switch" for="checkbox">
+                        <input type="checkbox" id="checkbox" />
+                        <div class="slider round">
+                            <i class="bi bi-moon-fill ms-1" style="line-height:28px;"></i>
+                            <i class="bi bi-sun-fill me-1" style="line-height:28px;"></i>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- Karşılama Alanı -->
+        <div class="welcome-banner">
+            <h2>Hoş Geldiniz,</h2>
+            <p>Kurumsal dijital arşiv sistemi üzerinden tüm klasörlerinize ve belgelerinize güvenle erişin.</p>
+            
+            <div class="search-box">
+                <i class="bi bi-search ms-2 me-2" style="color: rgba(255,255,255,0.7);"></i>
+                <input type="text" placeholder="SDP kodu veya klasör adı ile ara..." id="quickSearch">
+                <button type="button"><i class="bi bi-sliders"></i> Filtrele</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="section-title mb-0">GENEL BAKIŞ</h6>
+                    <small class="text-muted" style="font-size: 11px;">Son Güncelleme: 14:30</small>
+                </div>
+                
+                <div class="row">
+                    <div class="col-6">
+                        <div class="stat-card">
+                            <div class="stat-value">{{ toplam_klasor }}</div>
+                            <div class="stat-label">Toplam Klasör</div>
+                            <div class="stat-line"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-card warning">
+                            <div class="stat-value">27</div>
+                            <div class="stat-label">Eksik Evraklı</div>
+                            <div class="stat-line"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-card neutral">
+                            <div class="stat-value">0</div>
+                            <div class="stat-label">Süresi Dolan</div>
+                            <div class="stat-line"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-card neutral">
+                            <div class="stat-value">{{ aktif_donem }}</div>
+                            <div class="stat-label">Aktif Dönem</div>
+                            <div class="stat-line"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <h6 class="section-title">HIZLI İŞLEMLER</h6>
+                
+                <div class="row g-3">
+                    <div class="col-6">
+                        <a href="{{ url_for('ana_sayfa') }}" class="quick-action-card">
+                            <div class="icon-box"><i class="bi bi-file-earmark-arrow-up"></i></div>
+                            <h6>Yeni Belge Yükle</h6>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{{ url_for('ana_sayfa') }}" class="quick-action-card primary-action">
+                            <div class="icon-box"><i class="bi bi-folder2-open"></i></div>
+                            <h6>Klasörlere Göz At</h6>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="https://dijitalarsiv.com/yazi/arsiv-ayiklama-ve-imha-surecleri" target="_blank" class="quick-action-card">
+                            <div class="icon-box"><i class="bi bi-trash3"></i></div>
+                            <h6>İmha Takvimi</h6>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="https://www.devletarsivleri.gov.tr/Sayfalar/Sayfa.aspx?icerik=20&h=EC4EE38996FE1DD2D040D483800B793116ED6F1FD94ED1E517B581F5E16F395B" target="_blank" class="quick-action-card">
+                            <div class="icon-box"><i class="bi bi-book"></i></div>
+                            <h6>Kılavuz Görüntüle</h6>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="notification-card mt-3">
+                    <div class="icon-circle"><i class="bi bi-info-circle-fill"></i></div>
+                    <div>
+                        <h6 style="color:var(--text-color);">Sistem Bildirimi</h6>
+                        <p>2026 yılı arşivleme dönemi için yeni yönergeler yayınlanmıştır. SDP kodları güncellendi.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+    <script>
+        document.getElementById('quickSearch').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                // Burada ana sayfadaki klasör aramasına yönlendirilebilir.
+                window.location.href = "{{ url_for('ana_sayfa') }}";
+            }
+        });
+    </script>
+</body>
+</html>

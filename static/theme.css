@@ -1,0 +1,97 @@
+/* Tema Geçiş Butonu Stilleri */
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    margin-top: 15px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+.theme-switch {
+    display: inline-block;
+    height: 28px;
+    position: relative;
+    width: 56px;
+}
+.theme-switch input {
+    display: none;
+}
+.slider {
+    background-color: #4b4f5d;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+    border-radius: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 6px;
+}
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 20px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 20px;
+    border-radius: 50%;
+    z-index: 2;
+}
+input:checked + .slider {
+    background-color: #27a2e2;
+}
+input:checked + .slider:before {
+    transform: translateX(28px);
+}
+.slider i {
+    color: #f1c40f;
+    font-size: 12px;
+    z-index: 1;
+}
+.slider .bi-moon-fill {
+    color: #f1c40f;
+}
+.slider .bi-sun-fill {
+    color: #f39c12;
+}
+
+
+/* Karanlık Mod (Dark Mode) Override Stilleri */
+[data-theme="dark"] body { background-color: #121418 !important; color: #e9ecef !important; }
+[data-theme="dark"] .sidebar { background-color: #0b0c0f !important; border-right: 1px solid #1f2329 !important; }
+[data-theme="dark"] .top-navbar { background-color: #121418 !important; border-bottom: 1px solid #1f2329 !important; }
+[data-theme="dark"] .breadcrumb-text { color: #a2a5b9 !important; }
+[data-theme="dark"] .card { background-color: #1a1d24 !important; border: 1px solid #22252e !important; box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important; }
+[data-theme="dark"] .card-header { background-color: #1a1d24 !important; border-bottom: 1px solid #22252e !important; color: #27a2e2 !important; }
+[data-theme="dark"] .table { color: #e9ecef !important; }
+[data-theme="dark"] .table-light th, 
+[data-theme="dark"] .table-light td, 
+[data-theme="dark"] .table-light { background-color: #1a1d24 !important; color: #e9ecef !important; border-color: #2c303b !important; }
+[data-theme="dark"] .table-striped>tbody>tr:nth-of-type(odd)>* { background-color: rgba(255,255,255,0.02) !important; color: #e9ecef !important; border-color: #2c303b !important; }
+[data-theme="dark"] .table-hover>tbody>tr:hover>* { background-color: rgba(255,255,255,0.05) !important; color: #fff !important; }
+[data-theme="dark"] .table td, [data-theme="dark"] .table th { border-color: #2c303b !important; }
+
+/* Form Elements in Dark Mode */
+[data-theme="dark"] .form-control, 
+[data-theme="dark"] .form-select { background-color: #121418 !important; border-color: #2c303b !important; color: #e9ecef !important; }
+[data-theme="dark"] .form-control:focus, 
+[data-theme="dark"] .form-select:focus { background-color: #121418 !important; border-color: #27a2e2 !important; color: #fff !important; box-shadow: 0 0 0 0.25rem rgba(39, 162, 226, 0.25) !important; }
+
+/* Modal in Dark Mode */
+[data-theme="dark"] .modal-content { background-color: #1a1d24 !important; border-color: #2c303b !important; }
+[data-theme="dark"] .modal-header { border-bottom-color: #2c303b !important; }
+[data-theme="dark"] .modal-footer { border-top-color: #2c303b !important; }
+[data-theme="dark"] .modal-title { color: #fff !important; }
+[data-theme="dark"] .btn-close { filter: invert(1) grayscale(100%) brightness(200%); }
+
+/* Dashboard Specific in Dark Mode */
+[data-theme="dark"] .stat-card { background-color: #1a1d24 !important; border: 1px solid #2c303b !important; }
+[data-theme="dark"] .stat-card .stat-value { color: #27a2e2 !important; }
+[data-theme="dark"] .quick-action-card { background-color: #1a1d24 !important; border: 1px solid #2c303b !important; }
+[data-theme="dark"] .quick-action-card:hover { border-color: #27a2e2 !important; background-color: #22252e !important; }

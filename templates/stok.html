@@ -55,6 +55,7 @@
         .select2-container--default .select2-selection--single .select2-selection__rendered { line-height: 36px; color: #212529; }
         .select2-container--default .select2-selection--single .select2-selection__arrow { height: 36px; }
     </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
 </head>
 <body>
 
@@ -85,6 +86,16 @@
             
             <div style="margin-top: 30px; margin-bottom: 20px; width: 100%; padding: 0 15px;">
                 <a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm w-100 fw-bold d-flex align-items-center justify-content-center py-2"><i class="bi bi-box-arrow-left me-2"></i> Çıkış Yap</a>
+                <!-- Tema Geçiş Düğmesi -->
+                <div class="theme-switch-wrapper mt-3 text-center">
+                    <label class="theme-switch" for="checkbox">
+                        <input type="checkbox" id="checkbox" />
+                        <div class="slider round">
+                            <i class="bi bi-moon-fill ms-1" style="line-height:28px;"></i>
+                            <i class="bi bi-sun-fill me-1" style="line-height:28px;"></i>
+                        </div>
+                    </label>
+                </div>
             </div>
         </nav>
     </div>
@@ -315,5 +326,6 @@
                 });
             });
     </script>
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
 </body>
 </html>

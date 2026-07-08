@@ -89,7 +89,15 @@ def get_authorized_folders(user_id, rol):
     conn.close()
     return sonuc
 
+
 @app.route('/')
+@login_required
+def dashboard():
+    klasorler = get_authorized_folders(session['kullanici_id'], session['rol'])
+    toplam_klasor = len(klasorler)
+    return render_template('dashboard.html', toplam_klasor=toplam_klasor, aktif_donem="2026")
+
+@app.route('/klasorler')
 @login_required
 def ana_sayfa():
     klasorler = get_authorized_folders(session['kullanici_id'], session['rol'])
