@@ -60,19 +60,10 @@
 
     <!-- SIDEBAR -->
     <div class="sidebar">
-        <div class="logo-container">
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <div class="ktu-logo-emblem" style="width: 50px; height: 50px; border: 4px solid #fff; border-radius: 50%; position: relative;"></div>
-                <div class="logo-text-wrapper">
-                    <span class="logo-main-title">KTÜ</span>
-                    <div class="logo-sub-info">
-                        <span class="logo-year">1955</span>
-                        <span class="logo-uni-name">KARADENİZ TEKNİK ÜNİVERSİTESİ</span>
-                    </div>
-                </div>
-            </div>
+        <div class="logo-container text-center">
+            <img src="{{ url_for('static', filename='ktu_logo_new.png') }}" alt="Kurum Logosu">
         </div>
-        <h5 class="system-title">Dijital Arşiv Sistemi</h5>
+        <p class="system-title">Dijital Arşiv Sistemi</p>
         
         <div class="profile-card">
             <div class="profile-img">
@@ -240,6 +231,7 @@
                                         <th>Ürün</th>
                                         <th>Teslim Edilen Birim</th>
                                         <th>Çıkış Miktarı</th>
+                                        <th>Güncel Kalan</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -249,6 +241,7 @@
                                         <td><strong>{{ islem.malzeme_adi }}</strong></td>
                                         <td>{{ islem.birim_adi }}</td>
                                         <td><span class="badge bg-danger">{{ islem.adet }} {{ islem.birim_tipi }} Çıkış</span></td>
+                                        <td><span class="badge bg-primary text-white">{{ islem.stok_adedi }} {{ islem.birim_tipi }} Kaldı</span></td>
                                     </tr>
                                     {% else %}
                                     <tr><td colspan="4" class="text-center text-muted">Henüz işlem bulunmuyor.</td></tr>

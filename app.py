@@ -233,7 +233,7 @@ def stok_sayfasi():
     birimler = conn.execute('SELECT * FROM birimler ORDER BY birim_adi').fetchall()
     
     gecmis = conn.execute('''
-        SELECT h.id, m.malzeme_adi, b.birim_adi, h.adet, h.tarih, m.birim_tipi 
+        SELECT h.id, m.malzeme_adi, b.birim_adi, h.adet, h.tarih, m.birim_tipi, m.stok_adedi 
         FROM harcamalar h
         JOIN malzemeler m ON h.malzeme_id = m.id
         JOIN birimler b ON h.birim_id = b.id
