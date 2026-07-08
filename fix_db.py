@@ -15,7 +15,10 @@ def fix_db():
     cursor.execute("DELETE FROM klasorler WHERE id = '869-2'")
     
     # Optional: Delete related belgeler if any
-    cursor.execute("DELETE FROM belgeler WHERE klasor_id = '869-2'")
+    try:
+        cursor.execute("DELETE FROM evraklar WHERE klasor_id = '869-2'")
+    except:
+        pass
     
     conn.commit()
     conn.close()
