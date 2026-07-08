@@ -18,6 +18,15 @@
         .main-content { margin-left: 260px; padding: 30px; }
         .card { border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .table { background: #fff; border-radius: 4px; overflow: hidden; }
+    
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; position: relative; min-height: auto; padding-bottom: 20px; }
+            .main-content { margin-left: 0; }
+            .top-navbar { flex-direction: column; text-align: center; gap: 10px; }
+            .folder-list-panel, .file-list-panel { width: 100% !important; margin-bottom: 20px; }
+            .row { flex-direction: column; }
+            .col-md-3, .col-md-9, .col-md-4, .col-md-8 { width: 100% !important; }
+        }
     </style>
     <style>
         :root { --bs-primary: #102d5c; --bs-primary-rgb: 16,45,92; }

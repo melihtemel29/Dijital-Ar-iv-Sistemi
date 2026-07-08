@@ -83,6 +83,15 @@
         body.dark-mode .table tbody tr:hover { background-color: #252836; }
 
         body.dark-mode .form-control, body.dark-mode .form-select { background-color: #121212; border-color: #2c2e3e; color: #fff; }
+    
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; position: relative; min-height: auto; padding-bottom: 20px; }
+            .main-content { margin-left: 0; }
+            .top-navbar { flex-direction: column; text-align: center; gap: 10px; }
+            .folder-list-panel, .file-list-panel { width: 100% !important; margin-bottom: 20px; }
+            .row { flex-direction: column; }
+            .col-md-3, .col-md-9, .col-md-4, .col-md-8 { width: 100% !important; }
+        }
     </style>
     <script>
         if (localStorage.getItem('theme') === 'dark') {
