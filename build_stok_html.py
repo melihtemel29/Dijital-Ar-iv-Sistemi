@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+stok_html_content = """<!DOCTYPE html>
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
@@ -251,3 +251,8 @@
     </script>
 </body>
 </html>
+"""
+
+with open('templates/stok.html', 'w', encoding='utf-8') as f:
+    f.write(stok_html_content)
+print("stok.html updated")
