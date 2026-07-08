@@ -302,7 +302,7 @@ def stok_harca():
 def api_stok_grafik():
     conn = get_db_connection()
     veri = conn.execute('''
-        SELECT m.malzeme_adi, SUM(h.adet) as toplam
+        SELECT m.malzeme_adi, m.stok_adedi, SUM(h.adet) as toplam
         FROM harcamalar h
         JOIN malzemeler m ON h.malzeme_id = m.id
         GROUP BY h.malzeme_id
@@ -311,10 +311,11 @@ def api_stok_grafik():
     conn.close()
     
     labels = [row['malzeme_adi'] for row in veri]
-    data = [row['toplam'] for row in veri]
+    tuketilen = [row['toplam'] for row in veri]
+    kalan = [row['stok_adedi'] for row in veri]
     
     from flask import jsonify
-    return jsonify({'labels': labels, 'data': data})
+    return jsonify({'labels': labels, 'tuketilen': tuketilen, 'kalan': kalan})
 
 
 if __name__ == '__main__':
