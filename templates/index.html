@@ -110,7 +110,7 @@
         </a>
 
         <p class="nav-heading">Arşiv Bölümleri (SDP)</p>
-        <a onclick="filtreleGrup('HEPSİ', this)" class="nav-link active"><i class="bi bi-grid-fill"></i> Tüm Klasörler</a>
+        <a onclick="filtreleGrup('HEPSİ', this)" class="nav-link active"><i class="bi bi-grid-fill" style="color: #3498db;"></i> Tüm Klasörler</a>
         <a onclick="filtreleGrup('1', this)" class="nav-link"><i class="bi bi-building"></i> 1. Bölüm: Genel ve İdari</a>
         <a onclick="filtreleGrup('2', this)" class="nav-link"><i class="bi bi-person-lines-fill"></i> 2. Bölüm: Personel ve Özlük</a>
         <a onclick="filtreleGrup('3', this)" class="nav-link"><i class="bi bi-cash-coin"></i> 3. Bölüm: Mali İşler</a>
@@ -119,8 +119,8 @@
         
         <div style="margin-top: 30px; margin-bottom: 20px; width: 100%; padding: 0 15px;">
             {% if session.get('rol') == 'admin' %}
-            <a href="/stok" class="nav-link text-white mb-2" style="background: rgba(255,255,255,0.08); border-radius: 6px;"><i class="bi bi-box-seam text-info"></i> Stok Takip</a>
-            <a href="/admin" class="nav-link text-white mb-2" style="background: rgba(255,255,255,0.08); border-radius: 6px;"><i class="bi bi-shield-lock-fill text-warning"></i> Admin Paneli</a>
+            <a href="/stok" class="nav-link text-white mb-2" style="background: rgba(255,255,255,0.08); border-radius: 6px;"><i class="bi bi-box-seam" style="color: #2ecc71;"></i> Stok Takip</a>
+            <a href="/admin" class="nav-link text-white mb-2" style="background: rgba(255,255,255,0.08); border-radius: 6px;"><i class="bi bi-shield-lock-fill" style="color: #e74c3c;"></i> Admin Paneli</a>
             {% endif %}
             <a href="/logout" class="btn btn-danger btn-sm w-100 fw-bold d-flex align-items-center justify-content-center py-2"><i class="bi bi-box-arrow-left me-2"></i> Çıkış Yap</a>
                 <!-- Tema Geçiş Düğmesi -->

@@ -182,11 +182,11 @@
 
         <p class="nav-heading">MENÜ</p>
         <nav class="nav flex-column">
-            <a class="nav-link active" href="{{ url_for('dashboard') }}"><i class="bi bi-grid-fill"></i> Ana Sayfa</a>
-            <a class="nav-link" href="{{ url_for('ana_sayfa') }}"><i class="bi bi-folder2-open"></i> Klasörler</a>
+            <a class="nav-link active" href="{{ url_for('dashboard') }}"><i class="bi bi-grid-fill" style="color: #3498db;"></i> Ana Sayfa</a>
+            <a class="nav-link" href="{{ url_for('ana_sayfa') }}"><i class="bi bi-folder2-open" style="color: #f39c12;"></i> Klasörler</a>
             {% if session.get('rol') == 'admin' %}
-            <a class="nav-link" href="{{ url_for('stok_sayfasi') }}"><i class="bi bi-box-seam"></i> Stok & Sarf Malzeme</a>
-            <a class="nav-link" href="{{ url_for('admin_panel') }}"><i class="bi bi-shield-lock"></i> Admin Paneli</a>
+            <a class="nav-link" href="{{ url_for('stok_sayfasi') }}"><i class="bi bi-box-seam" style="color: #2ecc71;"></i> Stok & Sarf Malzeme</a>
+            <a class="nav-link" href="{{ url_for('admin_panel') }}"><i class="bi bi-shield-lock-fill" style="color: #e74c3c;"></i> Admin Paneli</a>
             {% endif %}
             
             <div style="margin-top: 30px; margin-bottom: 20px; width: 100%; padding: 0 15px;">
@@ -270,7 +270,7 @@
                     </div>
                     <div class="col-6">
                         <a href="{{ url_for('ana_sayfa') }}" class="quick-action-card primary-action">
-                            <div class="icon-box"><i class="bi bi-folder2-open"></i></div>
+                            <div class="icon-box"><i class="bi bi-folder2-open" style="color: #f39c12;"></i></div>
                             <h6>Klasörlere Göz At</h6>
                         </a>
                     </div>
