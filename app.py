@@ -31,7 +31,7 @@ def admin_required(f):
     def decorated_function(*args, **kwargs):
         if 'kullanici_id' not in session or session.get('rol') != 'admin':
             flash("Bu sayfaya erişim yetkiniz yok.")
-            return redirect(url_for('ana_sayfa'))
+            return redirect(url_for('dashboard'))
         return f(*args, **kwargs)
     return decorated_function
 
@@ -49,7 +49,7 @@ def login():
             session['kullanici_adi'] = user['kullanici_adi']
             session['ad_soyad'] = user['ad_soyad']
             session['rol'] = user['rol']
-            return redirect(url_for('ana_sayfa'))
+            return redirect(url_for('dashboard'))
         else:
             flash("Hatalı kullanıcı adı veya şifre.")
             return redirect(url_for('login'))
