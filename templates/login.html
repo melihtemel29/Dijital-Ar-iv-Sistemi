@@ -3,91 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kurumsal Arşiv Erişimi - Giriş</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}?v=2.2">
+    <title>Giriş - Dijital Arşiv Sistemi</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body {
+            /* Koyu lacivert/mavi gradyan arka plan */
+            background: linear-gradient(135deg, #0a192f 0%, #063952 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Özel Input Stilleri */
+        .input-group-custom {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .input-group-custom i.icon-left {
+            position: absolute;
+            left: 14px;
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+        
+        .input-group-custom input {
+            width: 100%;
+            padding: 12px 14px 12px 42px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background-color: #ffffff;
+            color: #374151;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+        
+        .input-group-custom input:focus {
+            border-color: #0b162c;
+            box-shadow: 0 0 0 2px rgba(11, 22, 44, 0.1);
+        }
+
+        .input-group-custom .icon-right {
+            position: absolute;
+            right: 14px;
+            color: #6b7280;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
-<body class="bg-slate-50 min-h-screen flex flex-col justify-between font-sans text-slate-800 antialiased">
+<body class="min-h-screen flex items-center justify-center p-4">
 
-    <header class="w-full py-4 bg-white border-b border-slate-100 flex justify-center items-center gap-2 shadow-xs">
-        <i class="fa-solid fa-shield-halved text-xl text-slate-700"></i>
-        <span class="font-bold tracking-wider text-slate-800 text-lg uppercase">Archive Secure</span>
-    </header>
-
-    <main class="flex-grow flex items-center justify-center p-4">
-        <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-slate-100/80">
+    <div class="w-full max-w-[420px] flex flex-col items-center">
+        
+        <!-- Üst Logo ve Başlık Kısmı -->
+        <div class="text-center mb-8 flex flex-col items-center">
+            <!-- Logonun etrafındaki arka plan resimdeki gibi koyu gri ise img ile gelir, değilse arkaplan ekleriz. 
+                 Mevcut ktu_logo_new.png'yi kullanıyoruz. -->
+            <img src="{{ url_for('static', filename='ktu_logo_new.png') }}" alt="KTÜ Logosu" class="w-48 mb-6">
             
-            <div class="flex flex-col items-center mb-8">
-                <div class="w-20 h-20 bg-slate-900 rounded-full flex items-center justify-center mb-4 shadow-sm">
-                    <i class="fa-solid fa-building-columns text-white text-3xl"></i>
-                </div>
-                <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Kurumsal Arşiv Erişimi</h1>
-                <p class="text-sm text-slate-500 mt-1">Kimliğinizi doğrulamak için giriş yapın.</p>
+            <h1 class="text-white text-2xl font-bold tracking-wide mb-1">Dijital Arşiv Sistemi</h1>
+            <p class="text-[#a8b8d0] text-sm font-medium">Üniversite Veri Güvenliği ve Arşiv Yönetimi</p>
+        </div>
+
+        <!-- Giriş Kartı -->
+        <div class="bg-[#f4f6f9] w-full rounded-xl shadow-2xl p-8 border border-white/10">
+            
+            <div class="mb-6">
+                <h2 class="text-[#1e293b] text-xl font-bold mb-1">Sisteme Giriş</h2>
+                <p class="text-[#64748b] text-[13px]">Lütfen kimlik bilgilerinizi kullanarak devam edin.</p>
             </div>
 
+            <!-- Uyarı Mesajları -->
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     {% for message in messages %}
-                        <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-3 rounded mb-4 text-sm flex items-center gap-2">
-                            <i class="fa-solid fa-circle-exclamation"></i>
+                        <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 rounded mb-4 text-sm flex items-center gap-2">
+                            <i class="bi bi-exclamation-circle-fill"></i>
                             <span>{{ message }}</span>
                         </div>
                     {% endfor %}
                 {% endif %}
             {% endwith %}
 
-            <form action="/login" method="POST" class="space-y-5">
-                <div>
-                    <label for="username" class="block text-sm font-semibold text-slate-700 mb-1.5">E-posta veya Kullanıcı Adı</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
-                            <i class="fa-regular fa-user"></i>
-                        </span>
-                        <input type="text" id="username" name="username" placeholder="kullanici@kurum.com" required
-                            class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-slate-900 focus:bg-white transition-all text-sm">
-                    </div>
+            <form action="/login" method="POST" class="space-y-4">
+                
+                <!-- Kullanıcı Adı -->
+                <div class="input-group-custom">
+                    <i class="bi bi-person icon-left"></i>
+                    <input type="text" id="username" name="username" placeholder="Kullanıcı Adı" required>
                 </div>
 
-                <div>
-                    <label for="password" class="block text-sm font-semibold text-slate-700 mb-1.5">Şifre</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
-                            <i class="fa-solid fa-key"></i>
-                        </span>
-                        <input type="password" id="password" name="password" placeholder="••••••••" required
-                            class="w-full pl-11 pr-11 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-slate-900 focus:bg-white transition-all text-sm">
-                        <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-slate-600">
-                            <i id="eye-icon" class="fa-regular fa-eye"></i>
-                        </button>
-                    </div>
+                <!-- Şifre -->
+                <div class="input-group-custom">
+                    <i class="bi bi-lock icon-left"></i>
+                    <input type="password" id="password" name="password" placeholder="Şifre" required>
+                    <button type="button" onclick="togglePassword()" class="icon-right" tabindex="-1">
+                        <i id="eye-icon" class="bi bi-eye"></i>
+                    </button>
                 </div>
 
-                <div class="flex items-center justify-between pt-1">
+                <!-- Beni Hatırla & Şifremi Unuttum -->
+                <div class="flex items-center justify-between mt-2 mb-2">
                     <label class="flex items-center gap-2 cursor-pointer select-none">
-                        <input type="checkbox" name="remember" class="w-4 h-4 rounded-sm border-slate-300 text-slate-900 accent-slate-900">
-                        <span class="text-sm text-slate-600 font-medium">Beni Hatırla</span>
+                        <input type="checkbox" name="remember" class="w-4 h-4 rounded border-gray-300 text-[#0b162c] focus:ring-[#0b162c]">
+                        <span class="text-[13px] text-[#475569] font-medium">Beni Hatırla</span>
                     </label>
-                    <a href="#" class="text-sm font-semibold text-slate-500 hover:text-slate-800 underline underline-offset-4">Şifremi Unuttum</a>
+                    <a href="#" class="text-[13px] font-semibold text-[#186a8a] hover:text-[#0b162c] transition-colors">Şifremi Unuttum</a>
                 </div>
 
-                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 px-4 rounded-xl shadow-xs flex items-center justify-center gap-2 mt-2 cursor-pointer">
-                    <i class="fa-solid fa-arrow-right-to-bracket text-sm"></i>
+                <!-- Giriş Yap Butonu -->
+                <button type="submit" class="w-full bg-[#0b162c] hover:bg-[#16274a] text-white font-bold py-3.5 px-4 rounded-lg shadow-md flex items-center justify-center gap-2 transition-colors mt-2">
                     <span>Giriş Yap</span>
+                    <i class="bi bi-box-arrow-in-right text-lg"></i>
                 </button>
-            </form>
-        </div>
-    </main>
 
-    <footer class="w-full py-6 text-center text-xs text-slate-400 bg-slate-50 border-t border-slate-100 space-y-2">
-        <p>© 2026 Archive Secure Institutional Systems. Tüm hakları saklıdır.</p>
-        <div class="flex justify-center gap-4 font-medium text-slate-500">
-            <a href="#" class="hover:text-slate-800">Gizlilik Politikası</a>
-            <span>|</span>
-            <a href="#" class="hover:text-slate-800">Destek</a>
+            </form>
+
+            <!-- Alt Bilgi / Resmi Erişim -->
+            <div class="mt-8 relative flex items-center justify-center">
+                <hr class="w-full border-gray-300">
+                <span class="absolute bg-[#f4f6f9] px-3 text-[10px] font-bold text-gray-500 tracking-wider">RESMİ ERİŞİM</span>
+            </div>
+            
+            <p class="text-center text-[#64748b] text-[12px] mt-4 px-2 leading-relaxed">
+                Sistem erişim sorunları için bilgi işlem merkeziyle iletişime geçiniz.
+            </p>
+
         </div>
-    </footer>
+    </div>
 
     <script>
         function togglePassword() {
@@ -95,14 +143,12 @@
             const eyeIcon = document.getElementById('eye-icon');
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                eyeIcon.className = "fa-solid fa-eye-slash";
+                eyeIcon.className = "bi bi-eye-slash";
             } else {
                 passwordInput.type = 'password';
-                eyeIcon.className = "fa-regular fa-eye";
+                eyeIcon.className = "bi bi-eye";
             }
         }
     </script>
-    
-    <script src="{{ url_for('static', filename='theme.js') }}"></script>
 </body>
 </html>
