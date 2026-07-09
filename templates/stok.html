@@ -61,14 +61,14 @@
 
         </style>
     
-    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}?v=2.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css?v=2.1') }}?v=2.0">
 </head>
 <body>
 
     <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="logo-container text-center">
-            <img src="{{ url_for('static', filename='ktu_logo_new.png') }}" alt="Kurum Logosu">
+            <a href="{{ url_for('dashboard') }}"><img src="{{ url_for('static', filename='ktu_logo_new.png') }}" alt="Kurum Logosu"></a>
         </div>
         <p class="system-title">Dijital Arşiv Sistemi</p>
         
