@@ -43,7 +43,15 @@
             .top-navbar { flex-direction: column; text-align: center; gap: 10px; }
         }
         
-        :root { --bs-primary: #102d5c; --bs-primary-rgb: 16,45,92; --bs-danger: #8a1538; }
+        :root { 
+            --bs-primary: #102d5c; --bs-primary-rgb: 16,45,92; --bs-danger: #8a1538;
+            --label-color: #212529;
+            --muted-color: #6c757d;
+        }
+        [data-theme="dark"] {
+            --label-color: #ffffff !important;
+            --muted-color: #ffffff !important;
+        }
         .bg-primary { background-color: #102d5c !important; }
         .text-primary { color: #102d5c !important; }
         .btn-primary { background-color: #102d5c !important; border-color: #102d5c !important; color: white !important; }
@@ -138,7 +146,7 @@
                         <div class="card-body">
                             <form action="{{ url_for('stok_harca') }}" method="POST">
                                 <div class="mb-3">
-                                    <label class="form-label">Malzeme / Ürün Seçin</label>
+                                    <label class="form-label" style="color: var(--label-color) !important;">Malzeme / Ürün Seçin</label>
                                     <select class="form-select" name="malzeme_id" required>
                                         <option value="">Seçiniz...</option>
                                         {% for m in malzemeler %}
@@ -147,7 +155,7 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Teslim Edilen Birim</label>
+                                    <label class="form-label" style="color: var(--label-color) !important;">Teslim Edilen Birim</label>
                                     <!-- ARAMA YAPILABİLEN MENÜ İÇİN id EKLENDİ -->
                                     <select class="form-select" name="birim_id" id="birimSelect" required>
                                         <option value=""></option>
@@ -157,7 +165,7 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Miktar (Adet veya Uzunluk)</label>
+                                    <label class="form-label" style="color: var(--label-color) !important;">Miktar (Adet veya Uzunluk)</label>
                                     <input type="number" class="form-control" name="adet" min="1" required>
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100">Çıkışı Kaydet</button>
@@ -173,12 +181,12 @@
                         <div class="card-body">
                             <form action="{{ url_for('stok_ekle') }}" method="POST">
                                 <div class="mb-3">
-                                    <label class="form-label">Malzeme Adı (Örn: CAT6 Kablo, 500GB SSD)</label>
+                                    <label class="form-label" style="color: var(--label-color) !important;">Malzeme Adı (Örn: CAT6 Kablo, 500GB SSD)</label>
                                     <input type="text" class="form-control" name="malzeme_adi" required>
-                                    <small class="text-muted">Mevcut bir ismi yazarsanız stoğu artırılır.</small>
+                                    <small class="text-muted" style="color: var(--muted-color) !important;">Mevcut bir ismi yazarsanız stoğu artırılır.</small>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Birim Tipi</label>
+                                    <label class="form-label" style="color: var(--label-color) !important;">Birim Tipi</label>
                                     <select class="form-select" name="birim_tipi">
                                         <option value="Adet">Adet</option>
                                         <option value="Metre">Metre</option>
@@ -187,7 +195,7 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Eklenecek Miktar</label>
+                                    <label class="form-label" style="color: var(--label-color) !important;">Eklenecek Miktar</label>
                                     <input type="number" class="form-control" name="stok_adedi" min="1" required>
                                 </div>
                                 <button type="submit" class="btn btn-success w-100" style="background-color: #28a745;">Stok Ekle</button>
