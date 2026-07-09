@@ -85,6 +85,7 @@
         .btn-danger:hover { background-color: #630c26 !important; border-color: #630c26 !important; color: white !important; }
     </style>
     
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}?v=2.0">
 </head>
 <body>
 
@@ -337,5 +338,6 @@
         });
     </script>
     
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
 </body>
 </html>
