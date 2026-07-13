@@ -511,13 +511,58 @@ def sdp_yukle():
         INSERT INTO sdp_evraklar (kullanici_id, departman, ana_sdp_kodu, alt_sdp_kodu, baslik, etiketler, aciklama, dosya_adi)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     ''', (session['kullanici_id'], departman, ana_kod, alt_kod, baslik, etiketler, aciklama, filename))
+
+    # SDP Klasör Senkronizasyonu
+    kategori_adi = ""
+    for group_key, group_val in SDP_KODLARI.items():
+        if ana_kod in group_val['codes']:
+            kategori_adi = group_val['codes'][ana_kod]
+            break
+            
+    klasor = conn.execute('SELECT * FROM klasorler WHERE id = ?', (ana_kod,)).fetchone()
+    if not klasor:
+        conn.execute('INSERT INTO klasorler (id, ad, grup) VALUES (?, ?, ?)', (ana_kod, ana_kod + " - " + kategori_adi, "SDP Arşivi"))
+        
+    yetki = conn.execute('SELECT * FROM klasor_yetkileri WHERE kullanici_id = ? AND klasor_id = ?', (session['kullanici_id'], ana_kod)).fetchone()
+    if not yetki:
+        conn.execute('INSERT INTO klasor_yetkileri (kullanici_id, klasor_id) VALUES (?, ?)', (session['kullanici_id'], ana_kod))
+        
+    conn.execute('INSERT INTO evraklar (klasor_id, evrak_tipi, dosya_adi) VALUES (?, ?, ?)', (ana_kod, baslik, filename))
+
     conn.commit()
     conn.close()
     
-    flash("Evrak başarıyla SDP sistemine eklendi.")
+    flash("Evrak başarıyla SDP sistemine ve Klasörlere eklendi.")
     return redirect(url_for('sdp_arsiv'))
 
 @app.route('/sdp/indir/<path:dosya_adi>')
 @login_required
 def sdp_indir(dosya_adi):
     return send_from_directory(app.config['UPLOAD_FOLDER'], dosya_adi, as_attachment=True)
+
+@app.route('/sdp/goruntule/<path:dosya_adi>')
+@login_required
+def sdp_goruntule(dosya_adi):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], dosya_adi)
+
+@app.route('/sdp/sil/<int:evrak_id>')
+@login_required
+def sdp_sil(evrak_id):
+    conn = get_db_connection()
+    evrak = conn.execute('SELECT * FROM sdp_evraklar WHERE id = ?', (evrak_id,)).fetchone()
+    if evrak:
+        if session.get('rol') == 'admin' or session.get('kullanici_id') == evrak['kullanici_id']:
+            dosya_yolu = os.path.join(app.config['UPLOAD_FOLDER'], evrak['dosya_adi'])
+            if os.path.exists(dosya_yolu):
+                try:
+                    os.remove(dosya_yolu)
+                except:
+                    pass
+            conn.execute('DELETE FROM sdp_evraklar WHERE id = ?', (evrak_id,))
+            conn.execute('DELETE FROM evraklar WHERE dosya_adi = ?', (evrak['dosya_adi'],))
+            conn.commit()
+            flash("Evrak başarıyla silindi.")
+        else:
+            flash("Bu evrakı silme yetkiniz yok.")
+    conn.close()
+    return redirect(url_for('sdp_arsiv'))

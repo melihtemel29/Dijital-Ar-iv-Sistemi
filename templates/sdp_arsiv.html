@@ -236,9 +236,17 @@
                                         {% endif %}
                                     </td>
                                     <td class="text-end">
-                                        <a href="/sdp/indir{{ '/' + evrak.dosya_adi }}" class="btn btn-sm btn-light border" title="İndir">
-                                            <i class="bi bi-download text-primary"></i>
+                                        <a href="/sdp/goruntule{{ '/' + evrak.dosya_adi }}" class="btn btn-sm btn-light border text-success" title="Görüntüle" target="_blank">
+                                            <i class="bi bi-eye"></i>
                                         </a>
+                                        <a href="/sdp/indir{{ '/' + evrak.dosya_adi }}" class="btn btn-sm btn-light border text-primary" title="İndir">
+                                            <i class="bi bi-download"></i>
+                                        </a>
+                                        {% if session.get('rol') == 'admin' or session.get('kullanici_id') == evrak.kullanici_id %}
+                                        <a href="/sdp/sil/{{ evrak.id }}" class="btn btn-sm btn-light border text-danger" title="Sil" onclick="return confirm('Bu evrakı silmek istediğinize emin misiniz?')">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                        {% endif %}
                                     </td>
                                 </tr>
                                 {% else %}
