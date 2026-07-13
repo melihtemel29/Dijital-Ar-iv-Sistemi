@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: arsiv_web
+    restart: always
+    volumes:
+      # Map the local 'uploads' directory to the container's '/app/uploads'
+      - ./uploads:/app/uploads
+      # Map the local SQLite DB to the container so data is persistent
+      - ./arsiv.db:/app/arsiv.db
+    # Environment variables can be added here if needed
+    environment:
+      - FLASK_ENV=production
+    # The application runs on 5000 inside the container, but we expose it via Nginx
+
+  nginx:
+    image: nginx:latest
+    container_name: arsiv_nginx
+    restart: always
+    ports:
+      # Expose port 80 to the outside world
+      - "80:80"
+    volumes:
+      # Map the nginx configuration file
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - web

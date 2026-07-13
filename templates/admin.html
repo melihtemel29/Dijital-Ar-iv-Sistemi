@@ -71,6 +71,8 @@
 
         <p class="nav-heading">Menü</p>
         <a href="/" class="nav-link"><i class="bi bi-arrow-left"></i> Arşive Dön</a>
+            <a class="nav-link" href="{{ url_for('sdp_arsiv') }}"><i class="bi bi-file-earmark-medical-fill" style="color: #9b59b6;"></i> SDP Arşivi</a>
+
         <a class="nav-link" href="/stok"><i class="bi bi-box-seam" style="color: #2ecc71;"></i> Stok & Sarf Malzeme</a>
         <a href="/admin" class="nav-link active"><i class="bi bi-shield-lock-fill" style="color: #e74c3c;"></i> Admin Paneli</a>
         
@@ -114,6 +116,22 @@
                             <div class="mb-3">
                                 <label class="small fw-bold text-muted">Şifre</label>
                                 <input type="text" name="sifre" class="form-control form-control-sm" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="small fw-bold text-muted">Departman / Birim</label>
+                                <select name="departman" class="form-select form-select-sm">
+                                    <option value="Genel">Genel (Sınırsız veya Belirtilmemiş)</option>
+                                    <option value="Öğrenci İşleri Daire Başkanlığı">Öğrenci İşleri Daire Başkanlığı</option>
+                                    <option value="Personel Daire Başkanlığı">Personel Daire Başkanlığı</option>
+                                    <option value="İdari ve Mali İşler Daire Başkanlığı">İdari ve Mali İşler Daire Başkanlığı</option>
+                                    <option value="Bilgi İşlem Daire Başkanlığı">Bilgi İşlem Daire Başkanlığı</option>
+                                    <option value="Sağlık, Kültür ve Spor Daire Başkanlığı">Sağlık, Kültür ve Spor Daire Başkanlığı</option>
+                                    <option value="Kütüphane ve Dokümantasyon Daire Başkanlığı">Kütüphane ve Dokümantasyon Daire Başkanlığı</option>
+                                    <option value="Strateji Geliştirme Daire Başkanlığı">Strateji Geliştirme Daire Başkanlığı</option>
+                                    <option value="Yapı İşleri ve Teknik Daire Başkanlığı">Yapı İşleri ve Teknik Daire Başkanlığı</option>
+                                    <option value="Hukuk Müşavirliği">Hukuk Müşavirliği</option>
+                                    <option value="Tüm Birimler">Tüm Birimler (Üst Yönetim)</option>
+                                </select>
                             </div>
                             <div class="mb-4">
                                 <label class="small fw-bold text-muted">Rol</label>
