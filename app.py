@@ -527,7 +527,8 @@ def sdp_yukle():
     if not yetki:
         conn.execute('INSERT INTO klasor_yetkileri (kullanici_id, klasor_id) VALUES (?, ?)', (session['kullanici_id'], ana_kod))
         
-    conn.execute('INSERT INTO evraklar (klasor_id, evrak_tipi, dosya_adi) VALUES (?, ?, ?)', (ana_kod, baslik, filename))
+    evrak_gorunum_ismi = f"{baslik} ({ana_kod} - {kategori_adi})"
+    conn.execute('INSERT INTO evraklar (klasor_id, evrak_tipi, dosya_adi) VALUES (?, ?, ?)', (ana_kod, evrak_gorunum_ismi, filename))
 
     conn.commit()
     conn.close()
