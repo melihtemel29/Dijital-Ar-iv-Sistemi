@@ -19,6 +19,11 @@
         
         /* Main Layout */
         .sidebar { width: 260px; position: fixed; top: 0; left: 0; height: 100vh; background-color: #1a1d24; padding-top: 20px; transition: all 0.3s; z-index: 1000; display: flex; flex-direction: column; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
+
+        .system-title { font-size: 13px; color: #fff; opacity: 0.9; font-weight: 500; padding: 10px 0 15px 0px; border-bottom: 1px solid rgba(255,255,255,0.08); margin: 0; text-align: center; }
+        .logo-container { padding: 25px 20px 20px 20px; display: flex; justify-content: center; align-items: center; }
+        .logo-container img { max-width: 140px; height: auto; }
+
         .sidebar .brand { color: #fff; font-size: 20px; font-weight: 700; text-align: center; margin-bottom: 30px; letter-spacing: 1px; }
         .sidebar .nav-link { color: #c2c7d0; padding: 12px 20px; font-size: 14px; border-left: 3px solid transparent; display: flex; align-items: center; text-decoration: none; cursor: pointer; }
         .sidebar .nav-link i { font-size: 16px; margin-right: 10px; width: 20px; text-align: center; }
@@ -86,9 +91,10 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <div class="brand">
-            <i class="bi bi-shield-check text-primary"></i> SDP Arşivi
+        <div class="logo-container text-center">
+            <a href="{{ url_for('dashboard') }}"><img src="{{ url_for('static', filename='ktu_logo_new.png') }}" alt="Kurum Logosu"></a>
         </div>
+        <p class="system-title">Dijital Arşiv Sistemi</p>
 
         <a href="{{ url_for('dashboard') }}" class="profile-card text-decoration-none">
             <div class="profile-img" style="overflow: hidden;">
