@@ -180,18 +180,16 @@
             </div>
         </a>
 
-        <p class="nav-heading">MENÜ</p>
-        <nav class="nav flex-column">
-            <a class="nav-link active" href="{{ url_for('dashboard') }}"><i class="bi bi-grid-fill" style="color: #3498db;"></i> Ana Sayfa</a>
-            <a class="nav-link" href="{{ url_for('ana_sayfa') }}"><i class="bi bi-folder2-open" style="color: #f39c12;"></i> Klasörler</a>
-            <a class="nav-link" href="{{ url_for('sdp_arsiv') }}"><i class="bi bi-file-earmark-medical-fill" style="color: #9b59b6;"></i> SDP Arşivi</a>
-
-            {% if session.get('rol') == 'admin' %}
-            <a class="nav-link" href="{{ url_for('stok_sayfasi') }}"><i class="bi bi-box-seam" style="color: #2ecc71;"></i> Stok & Sarf Malzeme</a>
-            <a class="nav-link" href="{{ url_for('admin_panel') }}"><i class="bi bi-shield-lock-fill" style="color: #e74c3c;"></i> Admin Paneli</a>
-            {% endif %}
-            
-            <div style="margin-top: 30px; margin-bottom: 20px; width: 100%; padding: 0 15px;">
+                <p class="nav-heading">Menü</p>
+        <a class="nav-link active" href="{{ url_for('dashboard') }}"><i class="bi bi-grid-fill" style="color: #3498db;"></i> Ana Sayfa</a>
+        <a class="nav-link " href="{{ url_for('ana_sayfa') }}"><i class="bi bi-folder2-open" style="color: #f39c12;"></i> Klasörler</a>
+        <a class="nav-link " href="{{ url_for('sdp_arsiv') }}"><i class="bi bi-file-earmark-medical-fill" style="color: #9b59b6;"></i> SDP Arşivi</a>
+        
+        {% if session.get('rol') == 'admin' %}
+        <a class="nav-link " href="{{ url_for('stok_sayfasi') }}"><i class="bi bi-box-seam" style="color: #2ecc71;"></i> Stok & Sarf Malzeme</a>
+        <a class="nav-link " href="{{ url_for('admin_panel') }}"><i class="bi bi-shield-lock-fill" style="color: #e74c3c;"></i> Admin Paneli</a>
+        {% endif %}
+        <div style="margin-top: 30px; margin-bottom: 20px; width: 100%; padding: 0 15px;">
                 <a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm w-100 fw-bold d-flex align-items-center justify-content-center py-2"><i class="bi bi-box-arrow-left me-2"></i> Çıkış Yap</a>
                 <!-- Tema Geçiş Düğmesi -->
                 <div class="theme-switch-wrapper mt-3 text-center">
