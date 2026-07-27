@@ -1142,6 +1142,7 @@ SDP_KODLARI = {
 @app.route('/sdp')
 @login_required
 def sdp_arsiv():
+    aktif_donem = session.get('aktif_donem', '2026')
     user_dept = session.get('departman', 'Genel')
     allowed_categories = {}
     
@@ -1158,9 +1159,9 @@ def sdp_arsiv():
             SELECT s.*, k.ad_soyad 
             FROM sdp_evraklar s 
             LEFT JOIN kullanicilar k ON s.kullanici_id = k.id 
-            WHERE s.ana_sdp_kodu = ?
+            WHERE s.ana_sdp_kodu = ? AND s.ait_oldugu_yil = ?
             ORDER BY s.yukleme_tarihi DESC
-        ''', (alt_kategori,)).fetchall()
+        ''', (alt_kategori, aktif_donem)).fetchall()
     else:
         evraklar = []
     conn.close()
@@ -1178,7 +1179,8 @@ def sdp_arsiv():
                            evraklar=evraklar, 
                            kategori=kategori, 
                            alt_kategori=alt_kategori,
-                           secili_kategori_data=secili_kategori_data)
+                           secili_kategori_data=secili_kategori_data,
+                           aktif_donem=aktif_donem)
 
 
 
