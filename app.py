@@ -665,6 +665,44 @@ def api_stok_grafik():
 
 
 
+
+def auto_migrate_db():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Check evraklar table
+    cursor.execute("PRAGMA table_info(evraklar)")
+    columns = [info['name'] for info in cursor.fetchall()]
+    if 'ait_oldugu_yil' not in columns:
+        cursor.execute('ALTER TABLE evraklar ADD COLUMN ait_oldugu_yil TEXT DEFAULT "2026"')
+        # Migrate old records
+        cursor.execute("SELECT id, yukleme_tarihi FROM evraklar WHERE ait_oldugu_yil IS NULL OR ait_oldugu_yil = '2026'")
+        for row in cursor.fetchall():
+            if row['yukleme_tarihi']:
+                year = str(row['yukleme_tarihi'])[:4]
+                conn.execute("UPDATE evraklar SET ait_oldugu_yil = ? WHERE id = ?", (year, row['id']))
+    
+    # Check sdp_evraklar table
+    cursor.execute("PRAGMA table_info(sdp_evraklar)")
+    columns = [info['name'] for info in cursor.fetchall()]
+    if 'ait_oldugu_yil' not in columns:
+        cursor.execute('ALTER TABLE sdp_evraklar ADD COLUMN ait_oldugu_yil TEXT DEFAULT "2026"')
+        # Migrate old records
+        cursor.execute("SELECT id, yukleme_tarihi FROM sdp_evraklar WHERE ait_oldugu_yil IS NULL OR ait_oldugu_yil = '2026'")
+        for row in cursor.fetchall():
+            if row['yukleme_tarihi']:
+                year = str(row['yukleme_tarihi'])[:4]
+                conn.execute("UPDATE sdp_evraklar SET ait_oldugu_yil = ? WHERE id = ?", (year, row['id']))
+                
+    conn.commit()
+    conn.close()
+
+# Run migrations at startup
+try:
+    auto_migrate_db()
+except Exception as e:
+    print("Auto migration error:", e)
+
 if __name__ == '__main__':
 
     # host='0.0.0.0' ayarı, yerel ağdaki herkesin bağlanmasını sağlar
