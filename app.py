@@ -126,7 +126,10 @@ def logout():
 
 
 
-def get_authorized_folders(user_id, rol):
+def get_authorized_folders(user_id, rol, aktif_donem=None):
+    if not aktif_donem:
+        from flask import session
+        aktif_donem = session.get('aktif_donem', '2026')
 
     conn = get_db_connection()
 
@@ -160,7 +163,7 @@ def get_authorized_folders(user_id, rol):
 
         
 
-        yuklenenler = conn.execute('SELECT evrak_tipi FROM evraklar WHERE klasor_id = ?', (k_dict['id'],)).fetchall()
+        yuklenenler = conn.execute('SELECT evrak_tipi FROM evraklar WHERE klasor_id = ? AND ait_oldugu_yil = ?', (k_dict['id'], aktif_donem)).fetchall()
 
         yuklenen_tipler = [y['evrak_tipi'] for y in yuklenenler]
 
@@ -183,6 +186,12 @@ def get_authorized_folders(user_id, rol):
 
 
 
+
+@app.route('/set_donem/<yil>')
+@login_required
+def set_donem(yil):
+    session['aktif_donem'] = yil
+    return redirect(request.referrer or url_for('dashboard'))
 
 @app.route('/')
 
