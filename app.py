@@ -170,7 +170,7 @@ def get_authorized_folders(user_id, rol):
 
         k_dict['eksikler'] = eksikler
 
-        k_dict['durum'] = 'Tamamlandı' if len(eksikler) == 0 else 'Eksik Evrak'
+        k_dict['durum'] = 'Boş Klasör' if len(yuklenen_tipler) == 0 else ('Tamamlandı' if len(eksikler) == 0 else 'Eksik Evrak')
 
         sonuc.append(k_dict)
 

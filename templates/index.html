@@ -180,6 +180,7 @@
                             <button onclick="filtreleDurum('HEPSİ')" class="status-filter-btn bg-secondary text-white">Hepsi</button>
                             <button onclick="filtreleDurum('Tamamlandı')" class="status-filter-btn bg-primary text-white">Tamamlandı (<span id="sayac-tamam">0</span>)</button>
                             <button onclick="filtreleDurum('Eksik Evrak')" class="status-filter-btn bg-danger text-white">Eksik (<span id="sayac-eksik">0</span>)</button>
+                              <button onclick="filtreleDurum('Boş Klasör')" class="status-filter-btn bg-secondary text-white">Boş Klasör (<span id="sayac-bos">0</span>)</button>
                         </div>
 
                         <div id="klasor-listesi-container" style="max-height: 65vh; overflow-y: auto; padding-right: 5px;">
@@ -318,9 +319,11 @@
                 let durum = satir.getAttribute('data-durum');
                 if(durum === 'Tamamlandı') t++;
                 if(durum === 'Eksik Evrak') e++;
+                if(durum === 'Boş Klasör') b++;
             });
             document.getElementById('sayac-tamam').innerText = t;
             document.getElementById('sayac-eksik').innerText = e;
+            if(document.getElementById('sayac-bos')) document.getElementById('sayac-bos').innerText = b;
         }
 
         function filtreleGrup(grupKodu, element) {
