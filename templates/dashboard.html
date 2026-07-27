@@ -259,10 +259,9 @@
                                           {{ aktif_donem }}
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" style="min-width: 100px;">
-                                          <li><a class="dropdown-item {% if aktif_donem == '2026' %}active{% endif %}" href="/set_donem/2026">2026</a></li>
-                                          <li><a class="dropdown-item {% if aktif_donem == '2025' %}active{% endif %}" href="/set_donem/2025">2025</a></li>
-                                          <li><a class="dropdown-item {% if aktif_donem == '2024' %}active{% endif %}" href="/set_donem/2024">2024</a></li>
-                                          <li><a class="dropdown-item {% if aktif_donem == '2023' %}active{% endif %}" href="/set_donem/2023">2023</a></li>
+                                          {% for yil in range(2030, 2014, -1) %}
+                                          <li><a class="dropdown-item {% if aktif_donem == yil|string %}active{% endif %}" href="/set_donem/{{ yil }}">{{ yil }}</a></li>
+                                          {% endfor %}
                                       </ul>
                                   </div>
                             </div>
