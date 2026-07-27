@@ -150,10 +150,10 @@
                 </div>
                 
                 <div class="tree-container">
-                    <div class="tree-item active" onclick="filterDocs('ALL', this)">
+                    <a href="{{ url_for('sdp_arsiv') }}" class="tree-item {% if not kategori %}active{% endif %} text-decoration-none">
                         <span class="tree-code"><i class="bi bi-collection"></i></span>
-                        <span>Tüm Belgeler</span>
-                    </div>
+                        <span>Ana Sayfa</span>
+                    </a>
                     
                     {% for group_id, group in categories.items() %}
                     <div class="tree-group mt-3">
@@ -162,11 +162,11 @@
                             {{ group_id }} - {{ group.name }}
                         </div>
                         <div class="tree-group-items">
-                            {% for code, name in group.codes.items() %}
-                            <div class="tree-item" data-sdp="{{ code }}" onclick="filterDocs('{{ code }}', this)">
+                            {% for code, data in group.codes.items() %}
+                            <a href="{{ url_for('sdp_arsiv', kategori=code) }}" class="tree-item {% if kategori == code %}active{% endif %} text-decoration-none" data-sdp="{{ code }}">
                                 <span class="tree-code">{{ code }}</span>
-                                <span>{{ name }}</span>
-                            </div>
+                                <span>{{ data.title }}</span>
+                            </a>
                             {% endfor %}
                         </div>
                     </div>
@@ -188,15 +188,45 @@
                     {% endif %}
                 {% endwith %}
                 
+                
+                {% if not kategori %}
+                <div class="d-flex flex-column align-items-center justify-content-center h-100">
+                    <i class="bi bi-folder-check text-muted mb-3" style="font-size: 4rem; opacity: 0.3;"></i>
+                    <h5 class="text-secondary fw-bold">SDP Arşivi'ne Hoş Geldiniz</h5>
+                    <p class="text-muted">Dosyalara ve kırılımlara erişmek için lütfen sol menüden bir kategori seçin.</p>
+                </div>
+                {% elif kategori and not alt_kategori %}
                 <div class="top-bar">
                     <div>
-                        <h4 class="fw-bold mb-1" id="currentCategoryTitle">Tüm Belgeler</h4>
-                        <p class="text-muted small mb-0" id="currentCategorySub">Seçilen kategoriye ait kayıtlar</p>
+                        <h4 class="fw-bold mb-1">{{ kategori }} - {{ secili_kategori_data.title }}</h4>
+                        <p class="text-muted small mb-0">Lütfen işlem yapmak istediğiniz alt kırılımı seçin</p>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    {% for sub_code, sub_title in secili_kategori_data.subcodes.items() %}
+                    <div class="col-md-6 col-lg-4">
+                        <a href="{{ url_for('sdp_arsiv', kategori=kategori, alt_kategori=sub_code) }}" class="card border-0 shadow-sm text-decoration-none h-100" style="transition: all 0.2s;">
+                            <div class="card-body d-flex align-items-center">
+                                <i class="bi bi-folder-fill text-warning fs-3 me-3"></i>
+                                <div>
+                                    <h6 class="mb-0 fw-bold text-dark">{{ sub_code }}</h6>
+                                    <small class="text-muted">{{ sub_title }}</small>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="top-bar">
+                    <div>
+                        <h4 class="fw-bold mb-1">{{ alt_kategori }} - {{ secili_kategori_data.subcodes[alt_kategori] }}</h4>
+                        <p class="text-muted small mb-0"><a href="{{ url_for('sdp_arsiv', kategori=kategori) }}" class="text-decoration-none"><i class="bi bi-arrow-left"></i> Geri Dön</a></p>
                     </div>
                     <div class="d-flex gap-3">
                         <div class="input-group" style="width: 250px;">
                             <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
-                            <input type="text" class="form-control border-start-0 ps-0" id="searchInput" placeholder="Belgelerde ara..." onkeyup="searchDocs()">
+                            <input type="text" class="form-control border-start-0 ps-0" id="searchInput" placeholder="Belgelerde ara..." onkeyup="searchDocsNew()">
                         </div>
                         <button class="btn btn-primary fw-bold" data-bs-toggle="modal" data-bs-target="#uploadModal">
                             <i class="bi bi-cloud-arrow-up-fill me-1"></i> Yeni Evrak
@@ -221,7 +251,7 @@
                                 {% for evrak in evraklar %}
                                 <tr class="doc-row" data-sdp="{{ evrak.ana_sdp_kodu }}">
                                     <td>
-                                        <span class="badge-sdp">{{ evrak.ana_sdp_kodu }}{{ '.' + evrak.alt_sdp_kodu if evrak.alt_sdp_kodu else '' }}</span>
+                                        <span class="badge-sdp">{{ evrak.ana_sdp_kodu }}</span>
                                     </td>
                                     <td>
                                         <div class="fw-bold text-primary">{{ evrak.baslik }}</div>
@@ -265,7 +295,7 @@
                                     <td colspan="6">
                                         <div class="empty-state">
                                             <i class="bi bi-folder-x"></i>
-                                            <h5>Bu kategoride henüz belge yok</h5>
+                                            <h5>Bu klasörde henüz belge yok</h5>
                                             <p>Yeni bir belge yüklemek için sağ üstteki "Yeni Evrak" butonunu kullanın.</p>
                                         </div>
                                     </td>
@@ -285,12 +315,9 @@
                         </table>
                     </div>
                 </div>
+                {% endif %}
                 
-            </div>
-        </div>
-    </div>
-
-    <!-- Upload Modal -->
+<!-- Upload Modal -->
     <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content border-0 shadow-lg">
@@ -300,26 +327,14 @@
                 </div>
                 <form action="{{ url_for('sdp_yukle') }}" method="POST" enctype="multipart/form-data">
                     <div class="modal-body p-4">
+                        {% if alt_kategori %}
+                        <input type="hidden" name="ana_sdp_kodu" value="{{ alt_kategori }}">
                         
-                        <div class="row mb-4">
-                            <div class="col-md-8">
-                                <label class="form-label fw-bold small text-muted uppercase">Ana SDP Kodu *</label>
-                                <select name="ana_sdp_kodu" class="form-select form-select-lg" required>
-                                    <option value="">-- Kategori Seçin --</option>
-                                    {% for group_id, group in categories.items() %}
-                                        <optgroup label="{{ group.name }}">
-                                        {% for code, name in group.codes.items() %}
-                                            <option value="{{ code }}">{{ code }} - {{ name }}</option>
-                                        {% endfor %}
-                                        </optgroup>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-bold small text-muted uppercase">Alt Kod (Opsiyonel)</label>
-                                <input type="text" name="alt_sdp_kodu" class="form-control form-control-lg" placeholder="Örn: 01">
-                            </div>
+                        <div class="alert alert-info border-0 shadow-sm mb-4">
+                            <strong><i class="bi bi-info-circle-fill me-2"></i>Seçili Klasör:</strong> 
+                            {{ alt_kategori }} - {{ secili_kategori_data.subcodes[alt_kategori] }}
                         </div>
+                        {% endif %}
 
                         <div class="mb-4">
                             <label class="form-label fw-bold small text-muted uppercase">Belge Başlığı / Konusu *</label>
@@ -357,16 +372,7 @@
     
     <script>
         // JS for Filtering Tree and Search
-        function filterDocs(sdpCode, element) {
-            // Update active state in tree
-            document.querySelectorAll('.tree-item').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
-            
-            // Update Headers
-            const titleEl = document.getElementById('currentCategoryTitle');
-            if (sdpCode === 'ALL') {
-                titleEl.textContent = 'Tüm Belgeler';
-            } else {
+         else {
                 titleEl.textContent = element.querySelector('span:nth-child(2)').textContent;
             }
             
@@ -388,7 +394,26 @@
             checkEmptyStates(visibleCount);
         }
         
-        function searchDocs() {
+        
+        function searchDocsNew() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('.doc-row');
+            let visibleCount = 0;
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            checkEmptyStates(visibleCount, query.length > 0);
+        }
+
+        function searchDocsOld() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const activeCategory = document.querySelector('.tree-item.active').getAttribute('data-sdp') || 'ALL';
             
