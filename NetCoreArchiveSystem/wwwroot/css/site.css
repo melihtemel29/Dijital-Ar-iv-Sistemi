@@ -1,0 +1,57 @@
+body { background-color: #f4f6f9; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+a { text-decoration: none; }
+
+/* Sidebar */
+.sidebar { background-color: #2c303b; height: 100vh; overflow-y: auto; color: #fff; width: 260px; position: fixed; z-index: 100; left: 0; top: 0; display: flex; flex-direction: column; }
+.logo-container { padding: 25px 20px 20px 20px; display: flex; justify-content: center; align-items: center; }
+.system-title { font-size: 13px; color: #fff; opacity: 0.9; font-weight: 500; padding: 10px 0 15px 0px; border-bottom: 1px solid rgba(255,255,255,0.08); margin: 0; text-align: center; }
+.profile-card { padding: 15px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 20px; }
+.profile-card:hover { background: rgba(255,255,255,0.02); }
+.profile-img { width: 42px; height: 42px; border-radius: 50%; background: #27a2e2; display: flex; align-items: center; justify-content: center; font-size: 18px; color: white; font-weight: bold; flex-shrink: 0; }
+.nav-heading { font-size: 11px; text-transform: uppercase; color: #686c87; padding: 15px 20px 5px 20px; font-weight: bold; margin: 0; }
+.sidebar .nav-link { color: #c2c7d0; padding: 12px 20px; font-size: 14px; border-left: 3px solid transparent; display: flex; align-items: center; text-decoration: none; cursor: pointer; }
+.sidebar .nav-link i { font-size: 16px; margin-right: 10px; width: 20px; text-align: center; }
+.sidebar .nav-link:hover, .sidebar .nav-link.active { background-color: rgba(255,255,255,0.05); color: #fff; border-left-color: #102d5c; }
+
+/* Main Content */
+.main-content { margin-left: 260px; min-height: 100vh; padding-bottom: 40px; }
+.top-navbar { background-color: #fff; border-bottom: 1px solid #e3e6f0; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
+
+/* Cards & Colors */
+.card { border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.04); border-radius: 8px; }
+.folder-card { transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+.folder-card:hover { transform: translateY(-3px); box-shadow: 0 .5rem 1rem rgba(0,0,0,.1)!important; }
+
+:root { --bs-primary: #102d5c; --bs-primary-rgb: 16,45,92; }
+.bg-primary { background-color: #102d5c !important; }
+.text-primary { color: #102d5c !important; }
+.btn-primary { background-color: #102d5c !important; border-color: #102d5c !important; color: white !important; }
+.btn-outline-primary { color: #102d5c !important; border-color: #102d5c !important; }
+.btn-outline-primary:hover { background-color: #102d5c !important; color: white !important; }
+
+/* Theme Toggle */
+.theme-switch-wrapper { display: flex; align-items: center; justify-content: center; }
+.theme-switch { display: inline-block; height: 34px; position: relative; width: 70px; }
+.theme-switch input { display:none; }
+.slider { background-color: rgba(255,255,255,0.1); bottom: 0; cursor: pointer; left: 0; position: absolute; right: 0; top: 0; transition: .4s; display:flex; justify-content: space-between; padding: 0 5px; align-items: center; }
+.slider:before { background-color: #fff; bottom: 4px; content: ""; height: 26px; left: 4px; position: absolute; transition: .4s; width: 26px; z-index: 2; }
+.slider.round { border-radius: 34px; }
+.slider.round:before { border-radius: 50%; }
+input:checked + .slider { background-color: #102d5c; }
+input:checked + .slider:before { transform: translateX(36px); }
+
+/* Dark Mode Support */
+[data-theme="dark"] body { background-color: #121418; color: #e9ecef; }
+[data-theme="dark"] .top-navbar { background-color: #1a1d24; border-bottom: 1px solid #2c303b; }
+[data-theme="dark"] .card { background-color: #1a1d24; }
+[data-theme="dark"] .sidebar { background-color: #1a1c23; }
+[data-theme="dark"] .table { color: #c2c7d0; }
+[data-theme="dark"] .table-light { background-color: #2c303b; color: #fff; }
+[data-theme="dark"] .text-dark { color: #e9ecef !important; }
+[data-theme="dark"] .bg-white { background-color: #1a1d24 !important; }
+[data-theme="dark"] .bg-light { background-color: #2c303b !important; border-color: #2c303b !important; }
+
+@media (max-width: 768px) {
+    .sidebar { width: 100%; position: relative; min-height: auto; padding-bottom: 20px; height: auto; }
+    .main-content { margin-left: 0; }
+}

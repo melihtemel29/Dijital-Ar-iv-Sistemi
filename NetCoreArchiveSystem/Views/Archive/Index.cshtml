@@ -1,0 +1,106 @@
+@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Klasörler";
+}
+
+<div class="top-navbar">
+    <p class="m-0 text-muted" style="font-size: 14px;">Bilgi İşlem Daire Başkanlığı / <strong class="text-dark">Arşiv Sistemi</strong></p>
+</div>
+
+<div class="container-fluid p-4">
+    <!-- Headers and Filters -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold mb-1 text-primary"><i class="bi bi-folder-fill me-2"></i>Dijital Arşiv Klasörleri</h4>
+            <p class="text-muted small mb-0">Tüm arşivlenmiş veya arşivlenmesi beklenen evraklar</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="/Archive/Index?grup=1. Bölüm" class="btn @(ViewBag.SeciliGrup == "1. Bölüm" ? "btn-primary" : "btn-outline-primary") shadow-sm rounded-pill px-3">
+                <i class="bi bi-tag-fill me-1"></i> 1. Bölüm
+            </a>
+            <a href="/Archive/Index?grup=2. Bölüm" class="btn @(ViewBag.SeciliGrup == "2. Bölüm" ? "btn-primary" : "btn-outline-primary") shadow-sm rounded-pill px-3">
+                <i class="bi bi-tag-fill me-1"></i> 2. Bölüm
+            </a>
+            <a href="/Archive/Index" class="btn @(string.IsNullOrEmpty(ViewBag.SeciliGrup) ? "btn-dark" : "btn-outline-dark") shadow-sm rounded-pill px-3">
+                <i class="bi bi-grid-fill me-1"></i> Tümü
+            </a>
+        </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="row g-4">
+        @foreach (var durum in Model)
+        {
+            var k = durum.Klasor;
+            var eksikSayisi = durum.EksikSayisi;
+            var zorunluSayisi = durum.ZorunluSayisi;
+            var yuzde = durum.Yuzde;
+            var eksikList = (List<string>)durum.EksikEvraklar;
+
+            string progressColor = "bg-success";
+            string statusIcon = "bi-check-circle-fill text-success";
+            string badgeColor = "bg-success";
+            string borderColor = "border-success";
+
+            if (yuzde == 0)
+            {
+                progressColor = "bg-danger";
+                statusIcon = "bi-x-circle-fill text-danger";
+                badgeColor = "bg-danger";
+                borderColor = "border-danger";
+            }
+            else if (yuzde < 100)
+            {
+                progressColor = "bg-warning";
+                statusIcon = "bi-exclamation-circle-fill text-warning";
+                badgeColor = "bg-warning text-dark";
+                borderColor = "border-warning";
+            }
+
+            if (k.BitisTarihiVarMi)
+            {
+                borderColor = "border-info";
+            }
+
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <a href="/Archive/Details/@k.Id" class="text-decoration-none">
+                    <div class="card folder-card h-100 border-top-0 border-end-0 border-bottom-0 border-start border-4 @borderColor shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="icon-circle @badgeColor bg-opacity-10 text-center rounded-circle" style="width: 45px; height: 45px; line-height: 45px;">
+                                    <i class="bi bi-folder2-open fs-4 text-dark"></i>
+                                </div>
+                                <span class="badge @badgeColor rounded-pill px-3 py-2 shadow-sm">
+                                    <i class="bi bi-list-check me-1"></i> @(zorunluSayisi - eksikSayisi)/@zorunluSayisi
+                                </span>
+                            </div>
+
+                            <h5 class="card-title fw-bold text-dark mb-1 text-truncate">@k.Ad</h5>
+                            <p class="text-muted small mb-3"><i class="bi bi-bookmarks me-1"></i> @k.Grup</p>
+
+                            <!-- Progress Bar -->
+                            <div class="progress" style="height: 6px; border-radius: 10px;">
+                                <div class="progress-bar @progressColor" role="progressbar" style="width: @yuzde%" aria-valuenow="@yuzde" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <small class="text-muted fw-bold">Tamamlanma</small>
+                                <small class="fw-bold @(yuzde == 100 ? "text-success" : "text-muted")">%@yuzde</small>
+                            </div>
+
+                            @if (eksikList.Count > 0)
+                            {
+                                <div class="mt-3 p-2 bg-light rounded border border-light">
+                                    <small class="text-danger fw-bold d-block mb-1"><i class="bi bi-exclamation-triangle-fill me-1"></i> Eksik Evraklar:</small>
+                                    <p class="m-0 text-muted" style="font-size: 11px; line-height: 1.4;">
+                                        @string.Join(", ", eksikList)
+                                    </p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>

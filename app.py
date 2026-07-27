@@ -65,12 +65,12 @@ def logout():
 def get_authorized_folders(user_id, rol):
     conn = get_db_connection()
     if rol == 'admin':
-        klasorler = conn.execute('SELECT * FROM klasorler').fetchall()
+        klasorler = conn.execute('SELECT * FROM klasorler WHERE is_deleted = 0 OR is_deleted IS NULL').fetchall()
     else:
         klasorler = conn.execute('''
             SELECT k.* FROM klasorler k
             JOIN klasor_yetkileri ky ON k.id = ky.klasor_id
-            WHERE ky.kullanici_id = ?
+            WHERE ky.kullanici_id = ? AND (k.is_deleted = 0 OR k.is_deleted IS NULL)
         ''', (user_id,)).fetchall()
         
     sonuc = []
@@ -567,3 +567,75 @@ def sdp_sil(evrak_id):
             flash("Bu evrakÄ± silme yetkiniz yok.")
     conn.close()
     return redirect(url_for('sdp_arsiv'))
+
+@app.route('/klasor/sil/<path:klasor_id>', methods=['POST'])
+@login_required
+def klasor_sil(klasor_id):
+    if session.get('rol') != 'admin':
+        flash("Klasör silme yetkiniz yok.")
+        return redirect(url_for('ana_sayfa'))
+    
+    conn = get_db_connection()
+    conn.execute('UPDATE klasorler SET is_deleted = 1 WHERE id = ?', (klasor_id,))
+    conn.commit()
+    conn.close()
+    flash("Klasör çöp kutusuna taþýndý.")
+    return redirect(url_for('ana_sayfa'))
+
+@app.route('/cop_kutusu')
+@login_required
+def cop_kutusu():
+    if session.get('rol') != 'admin':
+        flash("Çöp kutusunu görüntüleme yetkiniz yok.")
+        return redirect(url_for('ana_sayfa'))
+        
+    conn = get_db_connection()
+    silinmis_klasorler = conn.execute('SELECT * FROM klasorler WHERE is_deleted = 1').fetchall()
+    conn.close()
+    
+    return render_template('cop_kutusu.html', klasorler=silinmis_klasorler)
+
+@app.route('/klasor/kurtar/<path:klasor_id>', methods=['POST'])
+@login_required
+def klasor_kurtar(klasor_id):
+    if session.get('rol') != 'admin':
+        flash("Klasör kurtarma yetkiniz yok.")
+        return redirect(url_for('ana_sayfa'))
+    
+    conn = get_db_connection()
+    conn.execute('UPDATE klasorler SET is_deleted = 0 WHERE id = ?', (klasor_id,))
+    conn.commit()
+    conn.close()
+    flash("Klasör baþarýyla geri yüklendi.")
+    return redirect(url_for('cop_kutusu'))
+
+@app.route('/klasor/kalici_sil/<path:klasor_id>', methods=['POST'])
+@login_required
+def klasor_kalici_sil(klasor_id):
+    if session.get('rol') != 'admin':
+        flash("Kalýcý silme yetkiniz yok.")
+        return redirect(url_for('ana_sayfa'))
+    
+    conn = get_db_connection()
+    # 1. Get associated evraklar
+    evraklar = conn.execute('SELECT dosya_adi FROM evraklar WHERE klasor_id = ?', (klasor_id,)).fetchall()
+    for evrak in evraklar:
+        dosya_yolu = os.path.join(app.config['UPLOAD_FOLDER'], evrak['dosya_adi'])
+        if os.path.exists(dosya_yolu):
+            try:
+                os.remove(dosya_yolu)
+            except:
+                pass
+                
+    # 2. Delete from tables
+    conn.execute('DELETE FROM evraklar WHERE klasor_id = ?', (klasor_id,))
+    conn.execute('DELETE FROM sdp_evraklar WHERE ana_sdp_kodu = ?', (klasor_id,))
+    conn.execute('DELETE FROM klasor_yetkileri WHERE klasor_id = ?', (klasor_id,))
+    conn.execute('DELETE FROM klasorler WHERE id = ?', (klasor_id,))
+    
+    conn.commit()
+    conn.close()
+    
+    flash("Klasör ve içindeki tüm evraklar kalýcý olarak silindi.")
+    return redirect(url_for('cop_kutusu'))
+
