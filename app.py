@@ -198,12 +198,11 @@ def set_donem(yil):
 @login_required
 
 def dashboard():
-
-    klasorler = get_authorized_folders(session['kullanici_id'], session['rol'])
-
+    aktif_donem = session.get('aktif_donem', '2026')
+    klasorler = get_authorized_folders(session['kullanici_id'], session['rol'], aktif_donem)
     toplam_klasor = len(klasorler)
-
-    return render_template('dashboard.html', toplam_klasor=toplam_klasor, aktif_donem="2026")
+    eksik_sayisi = sum(1 for k in klasorler if k['durum'] == 'Eksik Evrak')
+    return render_template('dashboard.html', toplam_klasor=toplam_klasor, eksik_sayisi=eksik_sayisi, aktif_donem=aktif_donem)
 
 
 
@@ -212,10 +211,9 @@ def dashboard():
 @login_required
 
 def ana_sayfa():
-
-    klasorler = get_authorized_folders(session['kullanici_id'], session['rol'])
-
-    return render_template('index.html', klasorler=klasorler, secili_klasor=None)
+    aktif_donem = session.get('aktif_donem', '2026')
+    klasorler = get_authorized_folders(session['kullanici_id'], session['rol'], aktif_donem)
+    return render_template('index.html', klasorler=klasorler, secili_klasor=None, aktif_donem=aktif_donem)
 
 
 
@@ -1226,6 +1224,7 @@ def sdp_yukle():
     aciklama = request.form.get('aciklama', '')
 
     departman = session.get('departman', 'Genel')
+    ait_oldugu_yil = request.form.get('ait_oldugu_yil', session.get('aktif_donem', '2026'))
 
     
 
@@ -1247,11 +1246,11 @@ def sdp_yukle():
 
     conn.execute('''
 
-        INSERT INTO sdp_evraklar (kullanici_id, departman, ana_sdp_kodu, alt_sdp_kodu, baslik, etiketler, aciklama, dosya_adi)
+        INSERT INTO sdp_evraklar (kullanici_id, departman, ana_sdp_kodu, alt_sdp_kodu, baslik, etiketler, aciklama, dosya_adi, ait_oldugu_yil)
 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?), ?)
 
-    ''', (session['kullanici_id'], departman, ana_kod, alt_kod, baslik, etiketler, aciklama, filename))
+    ''', (session['kullanici_id'], departman, ana_kod, alt_kod, baslik, etiketler, aciklama, filename, ait_oldugu_yil))
 
 
 
