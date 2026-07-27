@@ -198,11 +198,9 @@
                 <i class="bi bi-arrow-counterclockwise"></i> Kurtar
             </button>
         </form>
-        <form action="{{ url_for('klasor_kalici_sil', klasor_id=k.id) }}" method="post" class="m-0 p-0" onsubmit="return confirm('Bu klasörü ve içindeki TÜM EVRAKLARI kalıcı olarak silmek istiyor musunuz? Bu işlem GERİ ALINAMAZ!');">
-            <button type="submit" class="btn btn-sm btn-danger p-1 px-2 text-white fw-bold shadow-sm" title="Kalıcı Sil">
-                <i class="bi bi-trash-fill"></i> Kalıcı Sil
-            </button>
-        </form>
+        <button type="button" class="btn btn-sm btn-danger p-1 px-2 text-white fw-bold shadow-sm" title="Kalıcı Sil" onclick="event.preventDefault(); showDeleteModal('{{ url_for('klasor_kalici_sil', klasor_id=k.id) }}');">
+            <i class="bi bi-trash-fill"></i> Kalıcı Sil
+        </button>
         {% endif %}
     </div>
 </div>
@@ -212,26 +210,7 @@
     <h5 class="text-muted mt-3">Çöp kutusu boş</h5>
 </div>
 {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    </a>
-                                    <div class="d-flex align-items-center gap-2">
-                                        {% if k.durum == 'TamamlandÄ±' %}
-                                            <span class="badge bg-primary rounded-pill"><i class="bi bi-check-lg"></i></span>
-                                        {% else %}
-                                            <span class="badge bg-danger rounded-pill"><i class="bi bi-x-lg"></i></span>
-                                        {% endif %}
-                                        {% if session.get('rol') == 'admin' %}
-                                        <form action="{{ url_for('klasor_sil', klasor_id=k.id) }}" method="post" class="m-0 p-0" onsubmit="return confirm('Bu klasÃ¶rÃ¼ Ã§Ã¶p kutusuna gÃ¶ndermek istiyor musunuz?');">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger border-0 p-1" title="Ã‡Ã¶pe At">
-                                                <i class="bi bi-trash-fill"></i>
-                                            </button>
-                                        </form>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            {% endfor %}
+
                         </div>
                     </div>
                 </div>
@@ -296,7 +275,36 @@
             }
         });
     </script>
+    <!-- Silme Onay Modalı -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+          <div class="modal-header bg-danger text-white border-0">
+            <h5 class="modal-title" id="deleteConfirmModalLabel"><i class="bi bi-exclamation-triangle-fill me-2"></i>Kalıcı Olarak Sil</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body py-4">
+            <p class="mb-0 text-dark fs-5 text-center">Bu klasörü ve içindeki TÜM EVRAKLARI kalıcı olarak silmek istiyor musunuz? Bu işlem GERİ ALINAMAZ!</p>
+          </div>
+          <div class="modal-footer border-0 d-flex justify-content-center bg-light">
+            <button type="button" class="btn btn-secondary px-4 fw-bold shadow-sm" data-bs-dismiss="modal">İptal</button>
+            <form id="deleteForm" method="POST" class="m-0">
+                <button type="submit" class="btn btn-danger px-4 fw-bold shadow-sm"><i class="bi bi-trash-fill me-1"></i> Evet, Kalıcı Sil</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+        function showDeleteModal(formActionUrl) {
+            document.getElementById('deleteForm').action = formActionUrl;
+            var myModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+            myModal.show();
+        }
+    </script>
     
     <script src="{{ url_for('static', filename='theme.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
