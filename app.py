@@ -280,6 +280,7 @@ def evrak_yukle(klasor_id):
     dosya = request.files['dosya']
 
     evrak_tipi = request.form.get('evrak_tipi')
+    ait_oldugu_yil = request.form.get('ait_oldugu_yil', session.get('aktif_donem', '2026'))
 
     
 
@@ -299,7 +300,7 @@ def evrak_yukle(klasor_id):
 
     conn = get_db_connection()
 
-    conn.execute('INSERT INTO evraklar (klasor_id, evrak_tipi, dosya_adi) VALUES (?, ?, ?)', (klasor_id, evrak_tipi, dosya_adi))
+    conn.execute('INSERT INTO evraklar (klasor_id, evrak_tipi, dosya_adi, ait_oldugu_yil) VALUES (?, ?, ?, ?)', (klasor_id, evrak_tipi, dosya_adi, ait_oldugu_yil))
 
     conn.commit()
 
@@ -1285,8 +1286,7 @@ def sdp_yukle():
     conn.execute('''
 
         INSERT INTO sdp_evraklar (kullanici_id, departman, ana_sdp_kodu, alt_sdp_kodu, baslik, etiketler, aciklama, dosya_adi, ait_oldugu_yil)
-
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?), ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 
     ''', (session['kullanici_id'], departman, ana_kod, alt_kod, baslik, etiketler, aciklama, filename, ait_oldugu_yil))
 
@@ -1300,8 +1300,7 @@ def sdp_yukle():
 
         if ana_kod in group_val['codes']:
 
-            kategori_adi = group_val['codes'][ana_kod]
-
+            kategori_adi = group_val['codes'][ana_kod]['title']
             break
 
             
@@ -1324,7 +1323,7 @@ def sdp_yukle():
 
     evrak_gorunum_ismi = f"{baslik} ({ana_kod} - {kategori_adi})"
 
-    conn.execute('INSERT INTO evraklar (klasor_id, evrak_tipi, dosya_adi) VALUES (?, ?, ?)', (ana_kod, evrak_gorunum_ismi, filename))
+    conn.execute('INSERT INTO evraklar (klasor_id, evrak_tipi, dosya_adi, ait_oldugu_yil) VALUES (?, ?, ?, ?)', (ana_kod, evrak_gorunum_ismi, filename, ait_oldugu_yil))
 
 
 
