@@ -747,16 +747,6 @@ try:
 except Exception as e:
     print("Auto migration error:", e)
 
-if __name__ == '__main__':
-
-    # host='0.0.0.0' ayarı, yerel ağdaki herkesin bağlanmasını sağlar
-
-    app.run(debug=True, host='0.0.0.0', port=5000)
-
-
-
-
-
 # --- SDP (Standart Dosya Planı) Modülü ---
 
 
@@ -1509,5 +1499,14 @@ def klasor_kalici_sil(klasor_id):
     
     flash("Klasör ve içindeki tüm evraklar kalıcı olarak silindi.")
     return redirect(url_for('cop_kutusu'))
+
+if __name__ == '__main__':
+
+    # host='0.0.0.0' ayarı, yerel ağdaki herkesin bağlanmasını sağlar
+
+    app.run(debug=True, host='0.0.0.0', port=5000)
+
+
+
 
 
