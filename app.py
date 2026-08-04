@@ -671,6 +671,49 @@ def auto_migrate_db():
     conn = get_db_connection()
     cursor = conn.cursor()
     
+    
+    # Check kullanicilar table for departman
+    cursor.execute("PRAGMA table_info(kullanicilar)")
+    columns = [info['name'] for info in cursor.fetchall()]
+    if 'departman' not in columns:
+        cursor.execute("ALTER TABLE kullanicilar ADD COLUMN departman TEXT DEFAULT 'Genel'")
+        conn.execute("UPDATE kullanicilar SET departman = 'Genel' WHERE departman IS NULL")
+
+    
+    # Check klasorler table for is_deleted
+    cursor.execute("PRAGMA table_info(klasorler)")
+    columns = [info['name'] for info in cursor.fetchall()]
+    if 'is_deleted' not in columns:
+        cursor.execute("ALTER TABLE klasorler ADD COLUMN is_deleted BOOLEAN DEFAULT 0")
+        conn.execute("UPDATE klasorler SET is_deleted = 0 WHERE is_deleted IS NULL")
+
+    # Check for stok tables (malzemeler, birimler, harcamalar)
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='malzemeler'")
+    if not cursor.fetchone():
+        cursor.execute('''CREATE TABLE malzemeler (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            malzeme_adi TEXT UNIQUE,
+            stok_adedi INTEGER DEFAULT 0,
+            birim_tipi TEXT DEFAULT 'Adet'
+        )''')
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='birimler'")
+    if not cursor.fetchone():
+        cursor.execute('''CREATE TABLE birimler (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            birim_adi TEXT UNIQUE
+        )''')
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='harcamalar'")
+    if not cursor.fetchone():
+        cursor.execute('''CREATE TABLE harcamalar (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            malzeme_id INTEGER,
+            birim_id INTEGER,
+            adet INTEGER,
+            tarih TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(malzeme_id) REFERENCES malzemeler(id),
+            FOREIGN KEY(birim_id) REFERENCES birimler(id)
+        )''')
+
     # Check evraklar table
     cursor.execute("PRAGMA table_info(evraklar)")
     columns = [info['name'] for info in cursor.fetchall()]
